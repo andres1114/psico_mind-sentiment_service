@@ -71,6 +71,8 @@ for x in range(len(sentiment_queue_ready_list)):
         sentence_process_object = TextBlob(raw_text)
 
     sentiment_queue_ready_list[x].set_score(sentence_process_object.sentiment)
+    sentiment_queue_ready_list[x].set_update_date(time.strftime('%Y-%m-%d %H:%M:%S'))
+    sentiment_queue_ready_list[x].set_status_id(sentiment_queue_status_enum.get_complete_status(db_object=sqlite_db_connection, debug_otuput=log_output_mode).get_id())
     sentiment_queue_ready_list[x].flush(db_object=sqlite_db_connection, debug_otuput=log_output_mode)
 
     functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Processed element: raw_text: {}, translated_text: {}, sentiment: {}".format(raw_text, translated_text, sentence_process_object.sentiment), logName="main")
