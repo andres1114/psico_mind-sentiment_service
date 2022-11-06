@@ -65,17 +65,17 @@ class SentimentQueueEntity:
         self.status_id = value
 
     def get_sentimetn_queue(self, **kwargs):
-        log_output_mode = kwargs.debug_otuput
-        class_object = self.SentimentQueueEntity
-        data_base_object = kwargs.db_object
+        log_output_mode = kwargs.get("debug_otuput")
+        class_object = SentimentQueueEntity()
+        data_base_object = kwargs.get("db_object")
 
-        functions.verbose(outputMode=log_output_mode,  outputMessage="[" + self.__name__ + "] " + " get_sentimetns_queue() " + "Enter", logName="main")
+        functions.verbose(outputMode=log_output_mode,  outputMessage="[" + self.__class__.__name__ + "] " + " get_sentimetns_queue() " + "Enter", logName="main")
         response_object = []
 
         query = "SELECT * FROM {} ORDER BY {} ASC".format(class_object.schema_name, class_object.schema_fields[0])
-        query_response = data_base_object.execute_query(query=query, queryArgs={}, queryReference="[" + self.__name__ + "] " + " get_sentimetns_queue() " + "get_sentimetns_queue", logOutputMode=log_output_mode)
+        query_response = data_base_object.execute_query(query=query, queryArgs={}, queryReference="[" + self.__class__.__name__ + "] " + " get_sentimetns_queue() " + "get_sentimetns_queue", logOutputMode=log_output_mode)
 
-        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__name__ + "] " + " get_sentimetns_queue() " + "Found {} rows".format(query_response[1]), logName="main")
+        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " get_sentimetns_queue() " + "Found {} rows".format(query_response[1]), logName="main")
 
         if (query_response[1] > 0):
             for x in range(query_response[1]):
@@ -91,44 +91,44 @@ class SentimentQueueEntity:
 
                 response_object.append(temp_class_object)
 
-        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__name__ + "] " + " get_sentimetns_queue() " + "Exit", logName="main")
+        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " get_sentimetns_queue() " + "Exit", logName="main")
         return response_object
 
     def flush(self, **kwargs):
-        log_output_mode = kwargs.debug_otuput
-        class_object = self.SentimentQueueEntity
-        data_base_object = kwargs.db_object
+        log_output_mode = kwargs.get("debug_otuput")
+        class_object = SentimentQueueEntity()
+        data_base_object = kwargs.get("db_object")
 
-        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__name__ + "] " + " flush() " + "Enter", logName="main")
+        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " flush() " + "Enter", logName="main")
 
         if self.get_insert_date() is not None:
-            query_args = {self.get_insert_date(),self.get_id()}
-            query = "UPDATE {} SET {} = ? WHERE {} = ?}".format(class_object.schema_name, class_object.schema_fields[1], class_object.schema_fields[0])
-            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+            query_args = [self.get_insert_date(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[1], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
         if self.get_update_date() is not None:
-            query_args = {self.get_update_date(),self.get_id()}
-            query = "UPDATE {} SET {} = ? WHERE {} = ?}".format(class_object.schema_name, class_object.schema_fields[2], class_object.schema_fields[0])
-            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+            query_args = [self.get_update_date(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[2], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
         if self.get_rrss_id() is not None:
-            query_args = {self.get_rrss_id(),self.get_id()}
-            query = "UPDATE {} SET {} = ? WHERE {} = ?}".format(class_object.schema_name, class_object.schema_fields[3], class_object.schema_fields[0])
-            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+            query_args = [self.get_rrss_id(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[3], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
         if self.get_evaluation_text() is not None:
-            query_args = {self.get_evaluation_text(),self.get_id()}
-            query = "UPDATE {} SET {} = ? WHERE {} = ?}".format(class_object.schema_name, class_object.schema_fields[4], class_object.schema_fields[0])
-            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+            query_args = [self.get_evaluation_text(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[4], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
         if self.get_score() is not None:
-            query_args = {self.get_score(),self.get_id()}
-            query = "UPDATE {} SET {} = ? WHERE {} = ?}".format(class_object.schema_name, class_object.schema_fields[5], class_object.schema_fields[0])
-            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+            query_args = [self.get_score(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[5], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
         if self.get_status_id() is not None:
-            query_args = {self.get_status_id(),self.get_id()}
-            query = "UPDATE {} SET {} = ? WHERE {} = ?}".format(class_object.schema_name, class_object.schema_fields[6], class_object.schema_fields[0])
-            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+            query_args = [self.get_status_id(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[6], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
-        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__name__ + "] " + " flush() " + "Exit", logName="main")
+        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " flush() " + "Exit", logName="main")

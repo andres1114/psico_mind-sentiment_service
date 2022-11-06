@@ -24,20 +24,21 @@ else:
 
 #Define the constants
 current_dir_path = os.path.dirname(os.path.abspath(__file__))
-sqlite_database_filename = "psicomind.sqlite3"
+db_dir_path = "db"
+sqlite_database_filename = "automata.sqlite3"
 gs = goslate.Goslate()
-sentiment_queue_object = SentimentQueueEntity
-sentiment_queue_status_enum = SentimentQueueStatusEnum
+sentiment_queue_object = SentimentQueueEntity()
+sentiment_queue_status_enum = SentimentQueueStatusEnum()
 
 functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Enter", logName="main")
-sqlite_db_connection = DataBaseConnection(db_type='sqlite', db_host=current_dir_path + "/" + sqlite_database_filename, db_user='', db_pass='', db_name='')
+sqlite_db_connection = DataBaseConnection(db_type='sqlite', db_host=current_dir_path + "\\..\\" + db_dir_path + "\\" + sqlite_database_filename, db_user='', db_pass='', db_name='')
 
 sentiment_queue_list = sentiment_queue_object.get_sentimetn_queue(db_object=sqlite_db_connection, debug_otuput=log_output_mode)
 sentiment_queue_ready_list = []
 
 for x in range(len(sentiment_queue_list)):
     if sentiment_queue_list[x].get_status_id() == sentiment_queue_status_enum.get_ready_status(db_object=sqlite_db_connection, debug_otuput=log_output_mode).get_id():
-        temp_object = SentimentQueueEntity
+        temp_object = SentimentQueueEntity()
         temp_object.set_id(sentiment_queue_list[x].get_id())
         temp_object.set_evaluation_text(sentiment_queue_list[x].get_evaluation_text())
 
