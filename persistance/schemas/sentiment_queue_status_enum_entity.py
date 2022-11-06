@@ -50,55 +50,55 @@ class SentimentQueueStatusEnum:
         self.value = value
 
     def get_ready_status(self, **kwargs):
-        log_output_mode = kwargs.debug_otuput
-        class_object = self.SentimentQueueStatusEnum
-        data_base_object = kwargs.db_object
+        log_output_mode = kwargs.get("debug_otuput")
+        class_object = SentimentQueueStatusEnum()
+        data_base_object = kwargs.get("db_object")
 
-        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__name__ + "] " + " get_ready_status() " + "Enter", logName="main")
+        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " get_ready_status() " + "Enter", logName="main")
         response_object = None
 
-        query_args = {enumerations.READY,}
+        query_args = [enumerations.READY,]
         query = "SELECT * FROM {} WHERE {} = ? ORDER BY {} ASC".format(class_object.schema_name, class_object.schema_fields[3], class_object.schema_fields[0])
-        query_response = data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " get_ready_status() " + "get_ready_status", logOutputMode=log_output_mode)
+        query_response = data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " get_ready_status() " + "get_ready_status", logOutputMode=log_output_mode)
 
 
         if (query_response[1] > 0):
-            temp_class_object = SentimentQueueStatusEnum
+            temp_class_object = SentimentQueueStatusEnum()
 
             temp_class_object.set_id(query_response[0][0][0])
-            temp_class_object.set_insert_date(query_response[0][1][0])
-            temp_class_object.set_update_date(query_response[0][2][0])
-            temp_class_object.set_name(query_response[0][3][0])
-            temp_class_object.set_value(query_response[0][4][0])
+            temp_class_object.set_insert_date(query_response[0][0][1])
+            temp_class_object.set_update_date(query_response[0][0][2])
+            temp_class_object.set_name(query_response[0][0][3])
+            temp_class_object.set_value(query_response[0][0][4])
 
             response_object = temp_class_object
 
-        functions.verbose(outputMode=log_output_mode,  outputMessage="[" + self.__name__ + "] " + " get_ready_status() " + "Exit", logName="main")
+        functions.verbose(outputMode=log_output_mode,  outputMessage="[" + self.__class__.__name__ + "] " + " get_ready_status() " + "Exit", logName="main")
         return response_object
 
     def get_complete_status(self, **kwargs):
-        log_output_mode = kwargs.debug_otuput
-        class_object = self.SentimentQueueStatusEnum
-        data_base_object = kwargs.db_object
+        log_output_mode = kwargs.get("debug_otuput")
+        class_object = SentimentQueueStatusEnum()
+        data_base_object = kwargs.get("db_object")
 
-        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__name__ + "] " + " get_complete_status() " + "Enter", logName="main")
+        functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " get_complete_status() " + "Enter", logName="main")
         response_object = None
 
-        query_args = {enumerations.COMPLETE,}
+        query_args = [enumerations.COMPLETE,]
         query = "SELECT * FROM {} WHERE {} = ? ORDER BY {} ASC".format(class_object.schema_name, class_object.schema_fields[3], class_object.schema_fields[0])
-        query_response = data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__name__ + "] " + " get_complete_status() " + "get_complete_status", logOutputMode=log_output_mode)
+        query_response = data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " get_complete_status() " + "get_complete_status", logOutputMode=log_output_mode)
 
 
         if (query_response[1] > 0):
             temp_class_object = SentimentQueueStatusEnum
 
             temp_class_object.set_id(query_response[0][0][0])
-            temp_class_object.set_insert_date(query_response[0][1][0])
-            temp_class_object.set_update_date(query_response[0][2][0])
-            temp_class_object.set_name(query_response[0][3][0])
-            temp_class_object.set_value(query_response[0][4][0])
+            temp_class_object.set_insert_date(query_response[0][0][1])
+            temp_class_object.set_update_date(query_response[0][0][2])
+            temp_class_object.set_name(query_response[0][0][3])
+            temp_class_object.set_value(query_response[0][0][4])
 
             response_object = temp_class_object
 
-        functions.verbose(outputMode=log_output_mode,  outputMessage="[" + self.__name__ + "] " + " get_complete_status() " + "Exit", logName="main")
+        functions.verbose(outputMode=log_output_mode,  outputMessage="[" + self.__class__.__name__ + "] " + " get_complete_status() " + "Exit", logName="main")
         return response_object
