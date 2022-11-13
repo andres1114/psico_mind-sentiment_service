@@ -88,7 +88,7 @@ class SentimentQueueEntity:
         functions.verbose(outputMode=log_output_mode,  outputMessage="[" + self.__class__.__name__ + "] " + " get_sentimetns_queue() " + "Enter", logName="main")
         response_object = []
 
-        query = "SELECT * FROM {} ORDER BY {} ASC".format(class_object.schema_name, class_object.schema_fields[0])
+        query = "SELECT * FROM {} WHERE {} = {} ORDER BY {} ASC".format(class_object.schema_name, class_object.schema_fields[6], 1, class_object.schema_fields[0])
         query_response = data_base_object.execute_query(query=query, queryArgs={}, queryReference="[" + self.__class__.__name__ + "] " + " get_sentimetns_queue() " + "get_sentimetns_queue", logOutputMode=log_output_mode)
 
         functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " get_sentimetns_queue() " + "Found {} rows".format(query_response[1]), logName="main")

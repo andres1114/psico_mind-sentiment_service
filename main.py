@@ -53,11 +53,17 @@ for x in range(len(sentiment_queue_list)):
 functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Found {} elements to process".format(len(sentiment_queue_ready_list)), logName="main")
 
 for x in range(len(sentiment_queue_ready_list)):
-    try:
-        raw_text = sentiment_queue_ready_list[x].get_evaluation_text()
 
-        sentence_process_object = TextBlob(raw_text)
-        translated_text = sentence_process_object.translate(from_lang='es', to='en')
+        raw_text = sentiment_queue_ready_list[x].get_evaluation_text()
+        try:
+            sentence_process_object = TextBlob(raw_text)
+            translated_text = sentence_process_object.translate(from_lang='es', to='en')
+        except:
+            sentiment_queue_ready_list[x].set_update_date(time.strftime('%Y-%m-%d %H:%M:%S'))
+            sentiment_queue_ready_list[x].set_status_id(sentiment_queue_status_enum.get_cancelled_status(db_object=sqlite_db_connection,debug_otuput=log_output_mode).get_id())
+            functions.verbose(outputMode=log_output_mode,outputMessage="[main] " + "SentimentService() " + "Failed element [{}]".format(sentiment_queue_ready_list[x].get_id()), logName="main")
+            sentiment_queue_ready_list[x].flush(db_object=sqlite_db_connection, debug_otuput=log_output_mode)
+            continue
 
         sentiment_queue_ready_list[x].set_score(float(sentence_process_object.sentiment.polarity))
         sentiment_queue_ready_list[x].set_update_date(time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -66,11 +72,7 @@ for x in range(len(sentiment_queue_ready_list)):
 
         functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Processed element: raw_text: '{}', translated_text: '{}', sentiment: {}".format(raw_text, translated_text, sentence_process_object.sentiment), logName="main")
         #functions.verbose(outputMode=log_output_mode,outputMessage="[main] " + "SentimentService() " + "Processed element: sentiment: {}".format(sentence_process_object.sentiment), logName="main")
-    except:
-        sentiment_queue_ready_list[x].set_update_date(time.strftime('%Y-%m-%d %H:%M:%S'))
-        sentiment_queue_ready_list[x].set_status_id(sentiment_queue_status_enum.get_cancelled_status(db_object=sqlite_db_connection, debug_otuput=log_output_mode).get_id())
-        functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Failed element [{}]".format(sentiment_queue_ready_list[x].get_id()), logName="main")
-        sentiment_queue_ready_list[x].flush(db_object=sqlite_db_connection, debug_otuput=log_output_mode)
+
 
 
 functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Exit", logName="main")
