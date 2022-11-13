@@ -2,6 +2,7 @@ from com import functions
 from com.db_connection import DataBaseConnection
 from persistance.schemas.sentiment_queue_entity import SentimentQueueEntity
 from persistance.schemas.sentiment_queue_status_enum_entity import SentimentQueueStatusEnum
+from persistance.schemas.run_entity import RunEntity
 import os.path
 import sys
 import time
@@ -29,6 +30,7 @@ sqlite_database_filename = "sentiments.sqlite3"
 gs = goslate.Goslate()
 sentiment_queue_object = SentimentQueueEntity()
 sentiment_queue_status_enum = SentimentQueueStatusEnum()
+run_object = RunEntity()
 
 functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Enter", logName="main")
 sqlite_db_connection = DataBaseConnection(db_type='sqlite', db_host=current_dir_path + "\\..\\" + db_dir_path + "\\" + sqlite_database_filename, db_user='', db_pass='', db_name='')
@@ -51,39 +53,24 @@ for x in range(len(sentiment_queue_list)):
 functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Found {} elements to process".format(len(sentiment_queue_ready_list)), logName="main")
 
 for x in range(len(sentiment_queue_ready_list)):
-    text_processed = False
-    raw_text = sentiment_queue_ready_list[x].get_evaluation_text()
+    try:
+        raw_text = sentiment_queue_ready_list[x].get_evaluation_text()
 
-    retry_counter = 0
-    retry_max = 3
-    while (not text_processed and (retry_counter < retry_max)):
-        try:
-            translated_text = gs.translate(raw_text, 'en')
-            text_processed = True
-
-        except:
-            retry_counter = retry_counter + 1
-            if retry_counter == retry_max:
-                functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Could not translate text after {} attempts, skipping translation".format(retry_counter), logName="main")
-            else:
-                functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Could not translate text (attempt {})".format(retry_counter), logName="main")
-            time.sleep(3)
-
-    if (text_processed):
-        sentence_process_object = TextBlob(translated_text)
-    else:
-        translated_text = raw_text
         sentence_process_object = TextBlob(raw_text)
-    sentiment_queue_ready_list[x].set_score(float(sentence_process_object.sentiment.polarity))
-    sentiment_queue_ready_list[x].set_update_date(time.strftime('%Y-%m-%d %H:%M:%S'))
-    sentiment_queue_ready_list[x].set_status_id(sentiment_queue_status_enum.get_complete_status(db_object=sqlite_db_connection, debug_otuput=log_output_mode).get_id())
-    sentiment_queue_ready_list[x].flush(db_object=sqlite_db_connection, debug_otuput=log_output_mode)
+        translated_text = sentence_process_object.translate(from_lang='es', to='en')
 
-    functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Processed element: raw_text: {}, translated_text: {}, sentiment: {}".format(raw_text, translated_text, sentence_process_object.sentiment), logName="main")
+        sentiment_queue_ready_list[x].set_score(float(sentence_process_object.sentiment.polarity))
+        sentiment_queue_ready_list[x].set_update_date(time.strftime('%Y-%m-%d %H:%M:%S'))
+        sentiment_queue_ready_list[x].set_status_id(sentiment_queue_status_enum.get_complete_status(db_object=sqlite_db_connection, debug_otuput=log_output_mode).get_id())
+        sentiment_queue_ready_list[x].flush(db_object=sqlite_db_connection, debug_otuput=log_output_mode)
 
+        #functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Processed element: raw_text: '{}', translated_text: '{}', sentiment: {}".format(raw_text, translated_text, sentence_process_object.sentiment), logName="main")
+        functions.verbose(outputMode=log_output_mode,outputMessage="[main] " + "SentimentService() " + "Processed element: sentiment: {}".format(sentence_process_object.sentiment), logName="main")
+    except:
+        sentiment_queue_ready_list[x].set_update_date(time.strftime('%Y-%m-%d %H:%M:%S'))
+        sentiment_queue_ready_list[x].set_status_id(sentiment_queue_status_enum.get_cancelled_status(db_object=sqlite_db_connection, debug_otuput=log_output_mode).get_id())
+        functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Failed element [{}]".fomat(sentiment_queue_ready_list[x].get_id()), logName="main")
+        sentiment_queue_ready_list[x].flush(db_object=sqlite_db_connection, debug_otuput=log_output_mode)
 
 
 functions.verbose(outputMode=log_output_mode, outputMessage="[main] " + "SentimentService() " + "Exit", logName="main")
-
-
-
