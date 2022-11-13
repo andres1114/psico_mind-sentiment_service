@@ -1,2 +1,2 @@
 READY = 'ready'
-COMPLETE = 'complete'
+COMPLETE = 'completed'

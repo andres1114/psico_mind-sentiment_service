@@ -5,22 +5,26 @@ class SentimentQueueEntity:
     schema_fields = []
 
     id = None
+    rrss_id = None
     insert_date = None
     update_date = None
-    rrss_id = None
     evaluation_text = None
     score = None
     status_id = None
+    error_desc = None
+    run_id = None
 
     def __init__(self):
         self.schema_name = "sentiment_queue"
-        self.schema_fields.append("id")                 #0
-        self.schema_fields.append("insert_date")        #1
-        self.schema_fields.append("update_date")        #2
-        self.schema_fields.append("rrss_id")            #3
-        self.schema_fields.append("evaluation_text")    #4
-        self.schema_fields.append("score")              #5
-        self.schema_fields.append("status_id")          #6
+        self.schema_fields.append("id_sentiment_queue")                     #0
+        self.schema_fields.append("id_rrss")                                #1
+        self.schema_fields.append("fecha_insert_sentiment_queue")           #2
+        self.schema_fields.append("fecha_update_sentiment_queue")           #3
+        self.schema_fields.append("texto_evaluacion_sentiment_queue")       #4
+        self.schema_fields.append("puntaje_sentiment_queue")                #5
+        self.schema_fields.append("estado_id_sentiment_queue")              #6
+        self.schema_fields.append("descripcion_error_sentiment_queue")      #7
+        self.schema_fields.append("run_id")                                 #8
 
     def get_id(self):
         return self.id
@@ -64,6 +68,18 @@ class SentimentQueueEntity:
     def set_status_id(self, value):
         self.status_id = value
 
+    def get_error_desc(self):
+        return self.error_desc
+
+    def set_error_desc(self, value):
+        self.error_desc = value
+
+    def get_run_id(self):
+        return self.run_id
+
+    def set_run_id(self, value):
+        self.run_id = value
+
     def get_sentimetn_queue(self, **kwargs):
         log_output_mode = kwargs.get("debug_otuput")
         class_object = SentimentQueueEntity()
@@ -79,15 +95,17 @@ class SentimentQueueEntity:
 
         if (query_response[1] > 0):
             for x in range(query_response[1]):
-                temp_class_object = SentimentQueueEntity
+                temp_class_object = SentimentQueueEntity()
 
                 temp_class_object.set_id(query_response[0][x][0])
-                temp_class_object.set_insert_date(query_response[0][x][1])
-                temp_class_object.set_update_date(query_response[0][x][2])
-                temp_class_object.set_rrss_id(query_response[0][x][3])
+                temp_class_object.set_rrss_id(query_response[0][x][1])
+                temp_class_object.set_insert_date(query_response[0][x][2])
+                temp_class_object.set_update_date(query_response[0][x][3])
                 temp_class_object.set_evaluation_text(query_response[0][x][4])
                 temp_class_object.set_score(query_response[0][x][5])
                 temp_class_object.set_status_id(query_response[0][x][6])
+                temp_class_object.set_error_desc(query_response[0][x][7])
+                temp_class_object.set_run_id(query_response[0][x][8])
 
                 response_object.append(temp_class_object)
 
@@ -101,18 +119,18 @@ class SentimentQueueEntity:
 
         functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " flush() " + "Enter", logName="main")
 
+        if self.get_rrss_id() is not None:
+            query_args = [self.get_rrss_id(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[1], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+
         if self.get_insert_date() is not None:
             query_args = [self.get_insert_date(),self.get_id()]
-            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[1], class_object.schema_fields[0])
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[2], class_object.schema_fields[0])
             data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
         if self.get_update_date() is not None:
             query_args = [self.get_update_date(),self.get_id()]
-            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[2], class_object.schema_fields[0])
-            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
-
-        if self.get_rrss_id() is not None:
-            query_args = [self.get_rrss_id(),self.get_id()]
             query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[3], class_object.schema_fields[0])
             data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
@@ -129,6 +147,16 @@ class SentimentQueueEntity:
         if self.get_status_id() is not None:
             query_args = [self.get_status_id(),self.get_id()]
             query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[6], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+
+        if self.get_error_desc() is not None:
+            query_args = [self.get_status_id(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[7], class_object.schema_fields[0])
+            data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
+
+        if self.get_run_id() is not None:
+            query_args = [self.get_status_id(),self.get_id()]
+            query = "UPDATE {} SET {} = ? WHERE {} = ?".format(class_object.schema_name, class_object.schema_fields[8], class_object.schema_fields[0])
             data_base_object.execute_query(query=query, queryArgs=query_args, queryReference="[" + self.__class__.__name__ + "] " + " flush() " + "flush", logOutputMode=log_output_mode)
 
         functions.verbose(outputMode=log_output_mode, outputMessage="[" + self.__class__.__name__ + "] " + " flush() " + "Exit", logName="main")

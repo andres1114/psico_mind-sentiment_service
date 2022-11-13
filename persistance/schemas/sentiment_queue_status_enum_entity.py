@@ -12,12 +12,12 @@ class SentimentQueueStatusEnum:
     value = None
 
     def __init__(self):
-        self.schema_name = "sentiment_queue"
-        self.schema_fields.append("id")             #0
-        self.schema_fields.append("insert_date")    #1
-        self.schema_fields.append("update_date")    #2
-        self.schema_fields.append("name")           #3
-        self.schema_fields.append("value")          #4
+        self.schema_name = "sentiment_queue_status_enum"
+        self.schema_fields.append("id_sentiment_queue_status_enum")             #0
+        self.schema_fields.append("fecha_insert_queue_status_enum")             #1
+        self.schema_fields.append("fecha_update_queue_status_enum")             #2
+        self.schema_fields.append("nombre_sentiment_queue_status_enum")         #3
+        self.schema_fields.append("valor_sentiment_queue_status_enum")          #4
 
     def get_id(self):
         return self.id
@@ -90,7 +90,7 @@ class SentimentQueueStatusEnum:
 
 
         if (query_response[1] > 0):
-            temp_class_object = SentimentQueueStatusEnum
+            temp_class_object = SentimentQueueStatusEnum()
 
             temp_class_object.set_id(query_response[0][0][0])
             temp_class_object.set_insert_date(query_response[0][0][1])

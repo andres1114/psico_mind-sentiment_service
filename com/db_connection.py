@@ -77,16 +77,16 @@ class DataBaseConnection:
 
             error_message = "ERR_CANT_EXECUTE_CURSOR Caught exception '" + str(e) + "', on query reference '" + kwargs.get('queryReference') + "_EXECUTE_CURSOR'"
             functions.verbose(outputMode=kwargs.get('logOutputMode'), outputMessage="[" + self.__class__.__name__ + "] " + " execute_query() " + error_message, logName="main")
-            kwargs.get('connectionObject').rollback()
+            self.db_connection.rollback()
             sys.exit(error_message)
 
         try:
-            kwargs.get('connectionObject').commit()
+            self.db_connection.commit()
         except Exception as e:
 
             error_message = "ERR_CANT_COMMIT_CURSOR Caught exception '" + str(e) + "', on query reference '" + kwargs.get('queryReference') + "_COMMIT_CURSOR'"
             functions.verbose(outputMode=kwargs.get('logOutputMode'), outputMessage="[" + self.__class__.__name__ + "] " + " execute_query() " + error_message, logName="main")
-            kwargs.get('connectionObject').rollback()
+            self.db_connection.rollback()
             sys.exit(error_message)
 
         if cursor.description is None:

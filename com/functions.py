@@ -9,7 +9,7 @@ def verbose(**kwargs):
     elif kwargs.get('outputMode') == 1:
         print("(" + time.strftime('%Y-%m-%d %H:%M:%S') + ") " + str(kwargs.get('outputMessage')))
 
-        dir_path = os.path.dirname(os.path.abspath(__file__)) + "/logs/"
-        file = open(dir_path + kwargs.get('logName') + '.log', 'a')
+        dir_path = os.path.dirname(os.path.abspath(__file__)) + "\\..\\logs\\"
+        file = open(dir_path + kwargs.get('logName') + '.log', 'a', encoding='utf8')
         file.write("(" + time.strftime('%Y-%m-%d %H:%M:%S') + ") " + str(kwargs.get('outputMessage')) + "\n")
         file.close()
